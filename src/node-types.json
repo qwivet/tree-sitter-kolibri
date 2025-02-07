@@ -1,6 +1,6 @@
 [
   {
-    "type": "apply",
+    "type": "apply_expression",
     "named": true,
     "fields": {},
     "children": {
@@ -8,23 +8,7 @@
       "required": true,
       "types": [
         {
-          "type": "curly_expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "parenthetical_expression",
-          "named": true
-        },
-        {
-          "type": "string",
+          "type": "expression",
           "named": true
         }
       ]
@@ -54,7 +38,7 @@
       "required": true,
       "types": [
         {
-          "type": "apply",
+          "type": "apply_expression",
           "named": true
         },
         {
@@ -78,7 +62,7 @@
           "named": true
         },
         {
-          "type": "parenthetical_expression",
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -96,15 +80,37 @@
   {
     "type": "opcurry",
     "named": true,
-    "fields": {},
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "operator",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "expression",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
         {
           "type": "main_op",
           "named": true
@@ -123,7 +129,18 @@
   {
     "type": "operator_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "operator",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -131,24 +148,12 @@
         {
           "type": "expression",
           "named": true
-        },
-        {
-          "type": "main_op",
-          "named": true
-        },
-        {
-          "type": "op",
-          "named": true
-        },
-        {
-          "type": "st_op",
-          "named": true
         }
       ]
     }
   },
   {
-    "type": "parenthetical_expression",
+    "type": "parenthesized_expression",
     "named": true,
     "fields": {},
     "children": {
@@ -163,7 +168,7 @@
     }
   },
   {
-    "type": "source_file",
+    "type": "program",
     "named": true,
     "root": true,
     "fields": {},
@@ -184,7 +189,20 @@
     "fields": {}
   },
   {
+    "type": "string",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "!>",
+    "named": false
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {
@@ -253,10 +271,6 @@
   },
   {
     "type": "op",
-    "named": true
-  },
-  {
-    "type": "string",
     "named": true
   },
   {

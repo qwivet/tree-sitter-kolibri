@@ -1,39 +1,36 @@
-; Operator types
-(st_op) @keyword.operator
+; Operators
 (main_op) @punctuation.delimiter
-(op) @operator
+(st_op) @operator
+(op) @punctuation.special
 
-; Brackets (different types)
+; Brackets
 "(" @punctuation.bracket
 ")" @punctuation.bracket
 "{" @punctuation.special
 "}" @punctuation.special
 
-; Curly block internals
-(curly_expression
-  (identifier) @variable.member
-  (operator_expression (op) @operator)
-  (string) @string.special.symbol
-)
-
 ; Identifiers
 (identifier) @variable
-(apply (identifier) @function.call)
 
-; Literals
+; Numbers
 (number) @number
+
+; Strings
 (string) @string
 
-; Special constructs
-(opcurry (operator) @keyword.operator)
-(apply (expression: (identifier) @function.call))
+; Function calls
+(apply_expression
+  (expression) @function.call
+  . (expression)* @variable.parameter
+)
 
-; Function application args
-(apply (expression: (_) @variable.parameter))
+; Operator currying
+(opcurry
+  (operator) @operator
+  (expression)* @variable.parameter
+)
 
-; Number subtypes
-(number) @number
-(number (op) @operator)  ; For numbers with operators
-
-; Type hints
-(type_annotation (identifier) @type)
+; Function application arguments
+(operator_expression
+  operator: (operator) @operator
+)

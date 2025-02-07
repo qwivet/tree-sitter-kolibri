@@ -1,58 +1,73 @@
+const PREC = {
+  OP_CURRY: 2,
+  APPLY: 1
+};
+
 module.exports = grammar({
   name: 'kolibri',
-  conflicts: $ => [],
-  precedences: $ => [
-    [$.apply, $.opcurry],
-    [$._term]
+
+  extras: $ => [
+    /\s/,
   ],
 
   rules: {
-    source_file: $ => $.expression,
+    program: $ => $.expression,
 
     expression: $ => choice(
-      $._term,
-      $.operator_expression,
-      $.apply,
-      $.opcurry
-    ),
-
-    _term: $ => choice(
       $.number,
       $.string,
       $.identifier,
-      $.parenthetical_expression,
-      $.curly_expression
+      $.operator_expression,
+      $.parenthesized_expression,
+      $.curly_expression,
+      $.opcurry,
+      $.apply_expression
     ),
 
-    operator_expression: $ => prec.left(seq(
+    operator_expression: $ => prec.left(PREC.APPLY, seq(
       $.expression,
-      choice($.st_op, $.main_op, $.op),
+      field('operator', $.operator),
       $.expression
     )),
 
-    parenthetical_expression: $ => seq('(', $.expression, ')'),
+    parenthesized_expression: $ => seq('(', $.expression, ')'),
     curly_expression: $ => seq('{', $.expression, '}'),
 
-    opcurry: $ => prec.left(2, seq(
+    opcurry: $ => prec.left(PREC.OP_CURRY, seq(
       '(',
-      choice($.st_op, $.main_op, $.op),
-      repeat1($.expression),
+      field('operator', $.operator),
+      repeat($.expression),
       ')'
     )),
 
-    apply: $ => prec.left(1, seq(
-      $._term,
-      repeat1($._term)
+    apply_expression: $ => prec.left(PREC.APPLY, seq(
+      $.expression,
+      repeat1($.expression)
     )),
 
-    identifier: $ => /[a-zA-Z_]+/,
-    number: $ => /\d+/,
-    string: $ => /"([^"\\]|\\.)*"/,
+    identifier: $ => /[^\W0-9_]+/,
+
+    operator: $ => choice(
+      $.st_op,
+      $.main_op,
+      $.op
+    ),
 
     st_op: $ => choice(
       '|>', '->', ':>', '!>', '<!', '<:', '<-', '<|', '>', '<'
     ),
-    main_op: $ => choice('=', ',', '.', ';'),
-    op: $ => token(/[^\w\s(){}]/),
+
+    main_op: $ => choice(
+      '=', ',', '.', ';'
+    ),
+
+    op: $ => token(/[^\w(){} \d\t\n\r\f\v]+/),
+
+    number: $ => /-?\d+/,
+
+    string: $ => choice(
+      seq('"', /[^"]*/, '"'),
+      seq("'", /[^']*/, "'")
+    ),
   }
 });

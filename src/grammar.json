@@ -2,32 +2,11 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "kolibri",
   "rules": {
-    "source_file": {
+    "program": {
       "type": "SYMBOL",
       "name": "expression"
     },
     "expression": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_term"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "operator_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "apply"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "opcurry"
-        }
-      ]
-    },
-    "_term": {
       "type": "CHOICE",
       "members": [
         {
@@ -44,17 +23,29 @@
         },
         {
           "type": "SYMBOL",
-          "name": "parenthetical_expression"
+          "name": "operator_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parenthesized_expression"
         },
         {
           "type": "SYMBOL",
           "name": "curly_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "opcurry"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "apply_expression"
         }
       ]
     },
     "operator_expression": {
       "type": "PREC_LEFT",
-      "value": 0,
+      "value": 1,
       "content": {
         "type": "SEQ",
         "members": [
@@ -63,21 +54,12 @@
             "name": "expression"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "st_op"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "main_op"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "op"
-              }
-            ]
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "SYMBOL",
+              "name": "operator"
+            }
           },
           {
             "type": "SYMBOL",
@@ -86,7 +68,7 @@
         ]
       }
     },
-    "parenthetical_expression": {
+    "parenthesized_expression": {
       "type": "SEQ",
       "members": [
         {
@@ -131,24 +113,15 @@
             "value": "("
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "st_op"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "main_op"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "op"
-              }
-            ]
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "SYMBOL",
+              "name": "operator"
+            }
           },
           {
-            "type": "REPEAT1",
+            "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
               "name": "expression"
@@ -161,7 +134,7 @@
         ]
       }
     },
-    "apply": {
+    "apply_expression": {
       "type": "PREC_LEFT",
       "value": 1,
       "content": {
@@ -169,13 +142,13 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "_term"
+            "name": "expression"
           },
           {
             "type": "REPEAT1",
             "content": {
               "type": "SYMBOL",
-              "name": "_term"
+              "name": "expression"
             }
           }
         ]
@@ -183,15 +156,24 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_]+"
+      "value": "[^\\W0-9_]+"
     },
-    "number": {
-      "type": "PATTERN",
-      "value": "\\d+"
-    },
-    "string": {
-      "type": "PATTERN",
-      "value": "\"([^\"\\\\]|\\\\.)*\""
+    "operator": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "st_op"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "main_op"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "op"
+        }
+      ]
     },
     "st_op": {
       "type": "CHOICE",
@@ -263,8 +245,51 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^\\w\\s(){}]"
+        "value": "[^\\w(){} \\d\\t\\n\\r\\f\\v]+"
       }
+    },
+    "number": {
+      "type": "PATTERN",
+      "value": "-?\\d+"
+    },
+    "string": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\""
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\"]*"
+            },
+            {
+              "type": "STRING",
+              "value": "\""
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "'"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^']*"
+            },
+            {
+              "type": "STRING",
+              "value": "'"
+            }
+          ]
+        }
+      ]
     }
   },
   "extras": [
@@ -274,26 +299,8 @@
     }
   ],
   "conflicts": [],
-  "precedences": [
-    [
-      {
-        "type": "SYMBOL",
-        "name": "apply"
-      },
-      {
-        "type": "SYMBOL",
-        "name": "opcurry"
-      }
-    ],
-    [
-      {
-        "type": "SYMBOL",
-        "name": "_term"
-      }
-    ]
-  ],
+  "precedences": [],
   "externals": [],
   "inline": [],
-  "supertypes": [],
-  "reserved": {}
+  "supertypes": []
 }
