@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "kolibri",
+      "camelcase": "Kolibri",
+      "title": "Kolibri",
+      "scope": "source.kolibri",
+      "file-types": [
+        "k"
+      ],
+      "injection-regex": "^kolibri$",
+      "class-name": "TreeSitterKolibri"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Kolibri programming language non-generalized parser",
+    "authors": [
+      {
+        "name": "qwivet",
+        "email": "qwivet@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/qwivet/tree-sitter-kolibri.git"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
