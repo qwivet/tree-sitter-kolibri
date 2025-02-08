@@ -1,5 +1,5 @@
 module.exports = grammar({
-  name: 'mylang',
+  name: 'kolibri',
 
   rules: {
     source_file: $ => $._expression,
