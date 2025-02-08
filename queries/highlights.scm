@@ -1,36 +1,25 @@
-; Operators
-(main_op) @punctuation.delimiter
-(st_op) @operator
-(op) @punctuation.special
+; main operators: =, ,, ., ;
+(main_operator) @operator.main
 
-; Brackets
-"(" @punctuation.bracket
-")" @punctuation.bracket
-"{" @punctuation.special
-"}" @punctuation.special
+; stream operators: |>, ->, :>, !>, <!, <:, <-, <|, >, <
+(stream_operator) @operator.stream
 
-; Identifiers
-(identifier) @variable
+; other operators
+(other_operator) @operator
 
-; Numbers
+; numbers
 (number) @number
 
-; Strings
+; strings
 (string) @string
 
-; Function calls
-(apply_expression
-  (expression) @function.call
-  . (expression)* @variable.parameter
-)
+; identifiers
+(identifier) @variable
 
-; Operator currying
-(opcurry
-  (operator) @operator
-  (expression)* @variable.parameter
-)
-
-; Function application arguments
-(operator_expression
-  operator: (operator) @operator
-)
+; brackets
+"(" @punctuation.bracket.round
+")" @punctuation.bracket.round
+"{" @punctuation.bracket.curly
+"}" @punctuation.bracket.curly
+"(" @punctuation.bracket.round
+")" @punctuation.bracket.round

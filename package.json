@@ -1,5 +1,13 @@
 {
   "name": "tree-sitter-kolibri",
+  "tree-sitter": [
+    {
+      "file-types": ["k", "klb"],
+      "highlights": [
+        "queries/highlights.scm"
+      ]
+    }
+  ],
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
