@@ -2,12 +2,13 @@
   "name": "tree-sitter-kolibri",
   "tree-sitter": [
     {
+      "scope": "source.k",
       "file-types": ["k", "klb"],
-      "highlights": [
-        "queries/highlights.scm"
-      ]
+      "highlights": ["queries/highlights.scm"]
     }
   ],
+  "main": "bindings/node",
+  "types": "bindings/node",
   "files": [
     "grammar.js",
     "binding.gyp",
@@ -18,7 +19,6 @@
   ],
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
