@@ -178,11 +178,6 @@
     }
   },
   {
-    "type": "main_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "op_expression",
     "named": true,
     "fields": {
@@ -351,15 +346,6 @@
     }
   },
   {
-    "type": "stream_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "!>",
-    "named": false
-  },
-  {
     "type": "(",
     "named": false
   },
@@ -368,55 +354,11 @@
     "named": false
   },
   {
-    "type": ",",
-    "named": false
-  },
-  {
-    "type": "->",
-    "named": false
-  },
-  {
-    "type": ".",
-    "named": false
-  },
-  {
-    "type": ":>",
-    "named": false
-  },
-  {
-    "type": ";",
-    "named": false
-  },
-  {
-    "type": "<",
-    "named": false
-  },
-  {
-    "type": "<!",
-    "named": false
-  },
-  {
-    "type": "<-",
-    "named": false
-  },
-  {
-    "type": "<:",
-    "named": false
-  },
-  {
-    "type": "<|",
-    "named": false
-  },
-  {
-    "type": "=",
-    "named": false
-  },
-  {
-    "type": ">",
-    "named": false
-  },
-  {
     "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "main_operator",
     "named": true
   },
   {
@@ -428,15 +370,15 @@
     "named": true
   },
   {
+    "type": "stream_operator",
+    "named": true
+  },
+  {
     "type": "string",
     "named": true
   },
   {
     "type": "{",
-    "named": false
-  },
-  {
-    "type": "|>",
     "named": false
   },
   {

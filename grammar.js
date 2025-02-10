@@ -45,13 +45,13 @@ module.exports = grammar({
       prec(1, $.other_operator)
     ),
 
-    stream_operator: $ => choice(
+    stream_operator: $ => token(choice(
       '|>', '->', ':>', '!>', '<!', '<:', '<-', '<|', '>', '<'
-    ),
+    )),
 
-    main_operator: $ => choice(
+    main_operator: $ => token(choice(
       '=', ',', '.', ';'
-    ),
+    )),
 
     other_operator: $ => token(/[^\w(){} \d\t\n\r\f\v]+/u),
 
@@ -74,7 +74,7 @@ module.exports = grammar({
       seq("'", /[^']*/, "'")
     )),
 
-    identifier: $ => /([\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)( +[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)*/u,
+    identifier: $ => token(/([\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)( +[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)*/u),
 //      identifier: $ => seq($.word, repeat(seq(repeat1(/\s/),  $.word))),
 
       parenthesized_expression: $ => seq(
