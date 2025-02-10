@@ -1,8 +1,13 @@
 module.exports = grammar({
   name: 'kolibri',
+  extras: $ => [/\s/],
 
+  conflicts: $ => [[$.full_expression,$.partial_expression],[$.op_expression,$.partial_expression],[$.identifier],[$.binary_expression],[$.parenthesized_expression],[$.curly_expression],[$.apply_expression]],
   rules: {
+
     source_file: $ => $._expression,
+
+    spaces: $ => choice(/\s/, /\n/, /\r/),
 
     _expression: $ => choice(
       $.binary_expression,
@@ -10,16 +15,34 @@ module.exports = grammar({
       $._primary_expression
     ),
 
-    binary_expression: $ => prec.left(seq(
+    binary_expression: $ => choice(
+      prec(4,$.op_expression),
+      prec(5,$.partial_expression),
+      prec(6,$.full_expression)
+    ),
+
+    op_expression: $ => seq(
+      field('operator', $.operator),
+    ),
+
+    partial_expression: $ => choice(seq(
+      field('operator', $.operator),
+      $._expression,
+    ),seq(
       $._expression,
       field('operator', $.operator),
-      $._expression
     )),
 
+    full_expression: $ => seq(
+      $._expression,
+      field('operator', $.operator),
+      $._expression,
+    ),
+
     operator: $ => choice(
-      prec(1, $.stream_operator),  // Lowest precedence
-      prec(2, $.main_operator),
-      prec(3, $.other_operator)
+      prec(3, $.main_operator),
+      prec(2, $.stream_operator),  // Lowest precedence
+      prec(1, $.other_operator)
     ),
 
     stream_operator: $ => choice(
@@ -33,12 +56,11 @@ module.exports = grammar({
     other_operator: $ => token(/[^\w(){} \d\t\n\r\f\v]+/u),
 
     _primary_expression: $ => choice(
+      $.identifier,
       $.number,
       $.string,
-      $.identifier,
       $.parenthesized_expression,
       $.curly_expression,
-      $.opcurry,
       $.apply_expression
     ),
 
@@ -52,27 +74,25 @@ module.exports = grammar({
       seq("'", /[^']*/, "'")
     )),
 
-    word: $ => /[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*/u,
-    identifier: $ => seq($.word, repeat(seq(' ', $.word))),
+    identifier: $ => /([\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)( +[\p{L}\p{Nl}][\p{L}\p{Nl}\p{Nd}\p{Mn}\p{Mc}\p{Pc}\p{Cf}']*)*/u,
+//      identifier: $ => seq($.word, repeat(seq(repeat1(/\s/),  $.word))),
 
-    parenthesized_expression: $ => seq(
-      '(', $._expression, ')'
-    ),
+      parenthesized_expression: $ => seq(
+        '(', 
+        $._expression, 
+        ')',
+      ),
 
-    curly_expression: $ => seq(
-      '{', $._expression, '}'
-    ),
+      curly_expression: $ => seq(
+        '{', 
+        $._expression, 
+        '}',
+      ),
 
-    opcurry: $ => seq(
-      '(',
-      field('operator', $.operator),
-      repeat(field('argument', $._expression)),
-      ')'
-    ),
+      apply_expression: $ => prec.left(1,seq(
+        field('function', $._primary_expression),
+        repeat1(field('argument', $._primary_expression,optional($.spaces)))
+        ))
 
-    apply_expression: $ => prec.left(1,seq(
-      field('function', $._primary_expression),
-      repeat1(field('argument', $._primary_expression))
-    )),
-  }
+  },
 });

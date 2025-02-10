@@ -6,6 +6,23 @@
       "type": "SYMBOL",
       "name": "_expression"
     },
+    "spaces": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "\\s"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\r"
+        }
+      ]
+    },
     "_expression": {
       "type": "CHOICE",
       "members": [
@@ -28,44 +45,113 @@
       ]
     },
     "binary_expression": {
-      "type": "PREC_LEFT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PREC",
+          "value": 4,
+          "content": {
             "type": "SYMBOL",
-            "name": "_expression"
-          },
-          {
-            "type": "FIELD",
-            "name": "operator",
-            "content": {
-              "type": "SYMBOL",
-              "name": "operator"
-            }
-          },
-          {
-            "type": "SYMBOL",
-            "name": "_expression"
+            "name": "op_expression"
           }
-        ]
-      }
+        },
+        {
+          "type": "PREC",
+          "value": 5,
+          "content": {
+            "type": "SYMBOL",
+            "name": "partial_expression"
+          }
+        },
+        {
+          "type": "PREC",
+          "value": 6,
+          "content": {
+            "type": "SYMBOL",
+            "name": "full_expression"
+          }
+        }
+      ]
+    },
+    "op_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "operator",
+          "content": {
+            "type": "SYMBOL",
+            "name": "operator"
+          }
+        }
+      ]
+    },
+    "partial_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "operator",
+              "content": {
+                "type": "SYMBOL",
+                "name": "operator"
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            },
+            {
+              "type": "FIELD",
+              "name": "operator",
+              "content": {
+                "type": "SYMBOL",
+                "name": "operator"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "full_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_expression"
+        },
+        {
+          "type": "FIELD",
+          "name": "operator",
+          "content": {
+            "type": "SYMBOL",
+            "name": "operator"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_expression"
+        }
+      ]
     },
     "operator": {
       "type": "CHOICE",
       "members": [
         {
           "type": "PREC",
-          "value": 1,
-          "content": {
-            "type": "SYMBOL",
-            "name": "stream_operator"
-          }
-        },
-        {
-          "type": "PREC",
-          "value": 2,
+          "value": 3,
           "content": {
             "type": "SYMBOL",
             "name": "main_operator"
@@ -73,7 +159,15 @@
         },
         {
           "type": "PREC",
-          "value": 3,
+          "value": 2,
+          "content": {
+            "type": "SYMBOL",
+            "name": "stream_operator"
+          }
+        },
+        {
+          "type": "PREC",
+          "value": 1,
           "content": {
             "type": "SYMBOL",
             "name": "other_operator"
@@ -160,6 +254,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
           "name": "number"
         },
         {
@@ -168,19 +266,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "identifier"
-        },
-        {
-          "type": "SYMBOL",
           "name": "parenthesized_expression"
         },
         {
           "type": "SYMBOL",
           "name": "curly_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "opcurry"
         },
         {
           "type": "SYMBOL",
@@ -246,35 +336,10 @@
         ]
       }
     },
-    "word": {
-      "type": "PATTERN",
-      "value": "[\\p{L}\\p{Nl}][\\p{L}\\p{Nl}\\p{Nd}\\p{Mn}\\p{Mc}\\p{Pc}\\p{Cf}']*",
-      "flags": "u"
-    },
     "identifier": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "word"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": " "
-              },
-              {
-                "type": "SYMBOL",
-                "name": "word"
-              }
-            ]
-          }
-        }
-      ]
+      "type": "PATTERN",
+      "value": "([\\p{L}\\p{Nl}][\\p{L}\\p{Nl}\\p{Nd}\\p{Mn}\\p{Mc}\\p{Pc}\\p{Cf}']*)( +[\\p{L}\\p{Nl}][\\p{L}\\p{Nl}\\p{Nd}\\p{Mn}\\p{Mc}\\p{Pc}\\p{Cf}']*)*",
+      "flags": "u"
     },
     "parenthesized_expression": {
       "type": "SEQ",
@@ -307,38 +372,6 @@
         {
           "type": "STRING",
           "value": "}"
-        }
-      ]
-    },
-    "opcurry": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "FIELD",
-          "name": "operator",
-          "content": {
-            "type": "SYMBOL",
-            "name": "operator"
-          }
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "FIELD",
-            "name": "argument",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_expression"
-            }
-          }
-        },
-        {
-          "type": "STRING",
-          "value": ")"
         }
       ]
     },
@@ -377,7 +410,31 @@
       "value": "\\s"
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    [
+      "full_expression",
+      "partial_expression"
+    ],
+    [
+      "op_expression",
+      "partial_expression"
+    ],
+    [
+      "identifier"
+    ],
+    [
+      "binary_expression"
+    ],
+    [
+      "parenthesized_expression"
+    ],
+    [
+      "curly_expression"
+    ],
+    [
+      "apply_expression"
+    ]
+  ],
   "precedences": [],
   "externals": [],
   "inline": [],

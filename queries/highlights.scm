@@ -1,8 +1,8 @@
 ; main operators: =, ,, ., ;
-(main_operator) @operator.main
+(main_operator) @keyword
 
 ; stream operators: |>, ->, :>, !>, <!, <:, <-, <|, >, <
-(stream_operator) @operator.stream
+(stream_operator) @keyword.conditional
 
 ; other operators
 (other_operator) @operator
@@ -17,9 +17,7 @@
 (identifier) @variable
 
 ; brackets
-"(" @punctuation.bracket.round
-")" @punctuation.bracket.round
-"{" @punctuation.bracket.curly
-"}" @punctuation.bracket.curly
-"(" @punctuation.bracket.round
-")" @punctuation.bracket.round
+"(" @punctuation.bracket
+")" @punctuation.bracket
+"{" @punctuation.special
+"}" @punctuation.special

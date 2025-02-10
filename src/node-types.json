@@ -24,10 +24,6 @@
             "named": true
           },
           {
-            "type": "opcurry",
-            "named": true
-          },
-          {
             "type": "parenthesized_expression",
             "named": true
           },
@@ -58,10 +54,6 @@
             "named": true
           },
           {
-            "type": "opcurry",
-            "named": true
-          },
-          {
             "type": "parenthesized_expression",
             "named": true
           },
@@ -75,6 +67,68 @@
   },
   {
     "type": "binary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "full_expression",
+          "named": true
+        },
+        {
+          "type": "op_expression",
+          "named": true
+        },
+        {
+          "type": "partial_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "curly_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "apply_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "curly_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "full_expression",
     "named": true,
     "fields": {
       "operator": {
@@ -113,73 +167,11 @@
           "named": true
         },
         {
-          "type": "opcurry",
-          "named": true
-        },
-        {
           "type": "parenthesized_expression",
           "named": true
         },
         {
           "type": "string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "curly_expression",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "apply_expression",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "curly_expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "opcurry",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "identifier",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "word",
           "named": true
         }
       ]
@@ -191,47 +183,9 @@
     "fields": {}
   },
   {
-    "type": "opcurry",
+    "type": "op_expression",
     "named": true,
     "fields": {
-      "argument": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "apply_expression",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "curly_expression",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "number",
-            "named": true
-          },
-          {
-            "type": "opcurry",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
       "operator": {
         "multiple": false,
         "required": true,
@@ -296,7 +250,53 @@
           "named": true
         },
         {
-          "type": "opcurry",
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "partial_expression",
+    "named": true,
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "operator",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "apply_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "curly_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         },
         {
@@ -340,10 +340,6 @@
           "named": true
         },
         {
-          "type": "opcurry",
-          "named": true
-        },
-        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -358,10 +354,6 @@
     "type": "stream_operator",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": " ",
-    "named": false
   },
   {
     "type": "!>",
@@ -424,6 +416,10 @@
     "named": false
   },
   {
+    "type": "identifier",
+    "named": true
+  },
+  {
     "type": "number",
     "named": true
   },
@@ -433,10 +429,6 @@
   },
   {
     "type": "string",
-    "named": true
-  },
-  {
-    "type": "word",
     "named": true
   },
   {
